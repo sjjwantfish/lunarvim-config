@@ -1,13 +1,3 @@
---[[
-lvim is the global options object
-
-Linters should be
-filled in as strings with either
-a global executable or a path to
-an executable
-]]
--- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
-
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save.enabled = true
@@ -16,13 +6,6 @@ lvim.transparent_window = false
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
--- keymappings [view all the defaults by pressing <leader>Lk]
-lvim.leader = "space"
--- -- add your own keymapping
--- lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
--- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
--- lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
-
 -- Change theme settings
 -- lvim.builtin.theme.options.dim_inactive = true
 -- lvim.builtin.theme.options.style = "storm"
@@ -30,7 +13,12 @@ lvim.leader = "space"
 require("custom-config.keymapping")
 require("custom-config.options")
 require("custom-config.telescope")
--- require("custom-config.aerial")
+require("custom-config.nvimtree")
+require("custom-config.aerial")
+-- require("custom-config.illuminate")
+require("custom-config.dadbod")
+require("custom-config.vim-interestingwords")
+require("custom-config.treesitter")
 
 -- -- Use which-key to add extra bindings with the leader-key prefix
 -- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
@@ -130,7 +118,7 @@ lvim.lsp.installer.setup.automatic_installation = false
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
     { command = "black", filetypes = { "python" } },
-    { command = "isort", filetypes = { "python" } },
+    -- { command = "isort", filetypes = { "python" } },
     {
         -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
         command = "prettier",
@@ -146,18 +134,6 @@ formatters.setup {
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
     { command = "flake8", filetypes = { "python" } },
-    -- {
-    --   -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
-    --   command = "shellcheck",
-    --   ---@usage arguments to pass to the formatter
-    --   -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
-    --   extra_args = { "--severity", "warning" },
-    -- },
-    -- {
-    --   command = "codespell",
-    --   ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
-    --   filetypes = { "javascript", "python" },
-    -- },
 }
 
 -- Additional Plugins
@@ -178,22 +154,38 @@ lvim.plugins = {
     { "tpope/vim-dadbod" },
     { "kristijanhusak/vim-dadbod-ui" },
     { "kristijanhusak/vim-dadbod-completion" },
-    -- height
+    -- code runner
+    { "michaelb/sniprun", run = "bash ./install.sh" },
+    -- ts
     { "lfv89/vim-interestingwords" },
-    { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' },
-    { "michaelb/sniprun", run = "bash ./install.sh" }
+    {
+        "p00f/nvim-ts-rainbow",
+    },
+    {
+        'abecodes/tabout.nvim',
+        config = function()
+            require('tabout').setup {
+                tabkey = '<Tab>', -- key to trigger tabout, set to an empty string to disable
+                backwards_tabkey = '<S-Tab>', -- key to trigger backwards tabout, set to an empty string to disable
+                act_as_tab = true, -- shift content if tab out is not possible
+                act_as_shift_tab = false, -- reverse shift content if tab out is not possible (if your keyboard/terminal supports <S-Tab>)
+                default_tab = '<C-t>', -- shift default action (only at the beginning of a line, otherwise <TAB> is used)
+                default_shift_tab = '<C-d>', -- reverse shift default action,
+                enable_backwards = true, -- well ...
+                completion = true, -- if the tabkey is used in a completion pum
+                tabouts = {
+                    { open = "'", close = "'" },
+                    { open = '"', close = '"' },
+                    { open = '`', close = '`' },
+                    { open = '(', close = ')' },
+                    { open = '[', close = ']' },
+                    { open = '{', close = '}' }
+                },
+                ignore_beginning = true, --[[ if the cursor is at the beginning of a filled element it will rather tab out than shift the content ]]
+                exclude = {} -- tabout will ignore these filetypes
+            }
+        end,
+        wants = { 'nvim-treesitter' }, -- or require if not used so far
+        after = { 'nvim-cmp' } -- if a completion plugin is using tabs load it before
+    }
 }
-
--- Autocommands (https://neovim.io/doc/user/autocmd.html)
--- vim.api.nvim_create_autocmd("BufEnter", {
---   pattern = { "*.json", "*.jsonc" },
---   -- enable wrap mode for json files only
---   command = "setlocal wrap",
--- })
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "zsh",
---   callback = function()
---     -- let treesitter use bash highlight for zsh files as well
---     require("nvim-treesitter.highlight").attach(0, "bash")
---   end,
--- })

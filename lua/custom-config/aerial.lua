@@ -16,7 +16,7 @@ aerial.setup({
         -- max_width = {40, 0.2} means "the lesser of 40 columns or 20% of total"
         -- max_width = { 40, 0.2 },
         width = nil,
-        min_width = 10,
+        min_width = 30,
 
         -- key-value pairs of window-local options for aerial window (e.g. winhl)
         win_opts = {},

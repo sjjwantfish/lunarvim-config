@@ -37,7 +37,7 @@
 -- }
 local telescope = lvim.builtin.telescope
 local actions = require("telescope.actions")
-local trouble = require("trouble.providers.telescope")
+-- local trouble = require("trouble.providers.telescope")
 -- telescope.load_extension("media_files")
 -- telescope.load_extension('aerial')
 
@@ -88,7 +88,7 @@ local config = {
                 ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
                 ["<C-l>"] = actions.complete_tag,
                 ["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
-                ["<c-t>"] = trouble.open_with_trouble,
+                -- ["<c-t>"] = trouble.open_with_trouble,
             },
 
             n = {
@@ -121,7 +121,7 @@ local config = {
                 ["<PageDown>"] = actions.results_scrolling_down,
 
                 ["?"] = actions.which_key,
-                ["<c-t>"] = trouble.open_with_trouble,
+                -- ["<c-t>"] = trouble.open_with_trouble,
             },
         },
     },
