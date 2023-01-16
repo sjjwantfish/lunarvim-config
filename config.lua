@@ -19,6 +19,7 @@ require("custom-config.aerial")
 require("custom-config.dadbod")
 require("custom-config.vim-interestingwords")
 require("custom-config.treesitter")
+require("custom-config.cmp")
 
 -- -- Use which-key to add extra bindings with the leader-key prefix
 -- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }

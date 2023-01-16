@@ -39,6 +39,9 @@ lvim.builtin.which_key.mappings["w"] = {
 lvim.builtin.which_key.mappings["sn"] = {
     "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Buffer fuzzy"
 }
+lvim.builtin.which_key.mappings["ss"] = {
+    "<cmd>Telescope lsp_document_symbols<cr>", "Buffer fuzzy"
+}
 
 -- lsp
 lvim.builtin.which_key.mappings["lh"] = {
