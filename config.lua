@@ -1,16 +1,13 @@
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save.enabled = true
-lvim.colorscheme = "lunar"
+-- lvim.colorscheme = "lunar"
 lvim.transparent_window = false
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
--- Change theme settings
--- lvim.builtin.theme.options.dim_inactive = true
--- lvim.builtin.theme.options.style = "storm"
-
 require("custom-config.keymapping")
+require("custom-config.colorscheme")
 require("custom-config.options")
 require("custom-config.telescope")
 require("custom-config.nvimtree")
@@ -44,20 +41,22 @@ lvim.builtin.lualine.style = "lvim" -- or "none"
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
-    "bash",
-    -- "c",
-    "javascript",
-    "json",
-    "lua",
     "python",
-    "typescript",
-    -- "tsx",
-    "css",
-    -- "rust",
-    -- "java",
-    "yaml",
+    "lua",
+    "json",
+    "go",
+    "html",
+    "javascript",
+    "vue",
+    "vim",
+    "dockerfile",
+    "markdown",
+    "sql",
+    "regex",
+    "bash"
 }
-
+lvim.builtin.treesitter.autotag.enable = true
+lvim.builtin.telescope.autopairs = { enable = true }
 lvim.builtin.treesitter.ignore_install = { "haskell" }
 lvim.builtin.treesitter.highlight.enable = true
 -----
@@ -99,8 +98,8 @@ lvim.lsp.installer.setup.automatic_installation = false
 -- local opts = {} -- check the lspconfig documentation for a list of all possible options
 -- require("lvim.lsp.manager").setup("pyright", opts)
 
--- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. !!Requires `:LvimCacheReset` to take effect!!
--- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
+---remove a server from the skipped list, e.g. eslint, or emmet_ls. !!Requires `:LvimCacheReset` to take effect!!
+---`:LvimInfo` lists which server(s) are skipped for the current filetype
 -- lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
 --   return server ~= "emmet_ls"
 -- end, lvim.lsp.automatic_configuration.skipped_servers)
@@ -120,25 +119,32 @@ local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
     { command = "black", filetypes = { "python" } },
     -- { command = "isort", filetypes = { "python" } },
-    {
-        -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
-        command = "prettier",
-        ---@usage arguments to pass to the formatter
-        -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
-        extra_args = { "--print-with", "100" },
-        ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
-        filetypes = { "typescript", "typescriptreact" },
-    },
+    -- {
+    --     -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
+    --     command = "prettier",
+    --     ---@usage arguments to pass to the formatter
+    --     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
+    --     extra_args = { "--print-with", "100" },
+    --     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
+    --     filetypes = { "typescript", "typescriptreact" },
+    -- },
+    { command = "eslint_d",
+        filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact", "vue", "svelte" } }
 }
 
 -- set additional linters
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
     { command = "flake8", filetypes = { "python" } },
+    { command = "eslint_d",
+        filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact", "vue", "svelte" } },
 }
 
 -- Additional Plugins
 lvim.plugins = {
+    -- colorscheme
+    { "rafamadriz/neon" },
+    { 'projekt0n/github-nvim-theme', tag = '0.0.6' },
     { "folke/trouble.nvim", cmd = "TroubleToggle" },
     { "stevearc/aerial.nvim" },
     -- jumping
@@ -162,31 +168,47 @@ lvim.plugins = {
     {
         "p00f/nvim-ts-rainbow",
     },
-    {
-        'abecodes/tabout.nvim',
-        config = function()
-            require('tabout').setup {
-                tabkey = '<Tab>', -- key to trigger tabout, set to an empty string to disable
-                backwards_tabkey = '<S-Tab>', -- key to trigger backwards tabout, set to an empty string to disable
-                act_as_tab = true, -- shift content if tab out is not possible
-                act_as_shift_tab = false, -- reverse shift content if tab out is not possible (if your keyboard/terminal supports <S-Tab>)
-                default_tab = '<C-t>', -- shift default action (only at the beginning of a line, otherwise <TAB> is used)
-                default_shift_tab = '<C-d>', -- reverse shift default action,
-                enable_backwards = true, -- well ...
-                completion = true, -- if the tabkey is used in a completion pum
-                tabouts = {
-                    { open = "'", close = "'" },
-                    { open = '"', close = '"' },
-                    { open = '`', close = '`' },
-                    { open = '(', close = ')' },
-                    { open = '[', close = ']' },
-                    { open = '{', close = '}' }
-                },
-                ignore_beginning = true, --[[ if the cursor is at the beginning of a filled element it will rather tab out than shift the content ]]
-                exclude = {} -- tabout will ignore these filetypes
-            }
-        end,
-        wants = { 'nvim-treesitter' }, -- or require if not used so far
-        after = { 'nvim-cmp' } -- if a completion plugin is using tabs load it before
-    }
+    { 'windwp/nvim-ts-autotag' },
+    -- lsp
+    { "jayp0521/mason-null-ls.nvim",
+        -- config = function()
+        --   require("mason-null-ls").setup(
+        --     {
+        --       -- A list of sources to install if they're not already installed.
+        --       -- This setting has no relation with the `automatic_installation` setting.
+        --       -- ensure_installed = require("user.lsp.config").null_ls,
+
+        --       -- Run `require("null-ls").setup`.
+        --       -- Will automatically install masons tools based on selected sources in `null-ls`.
+        --       -- Can also be an exclusion list.
+        --       -- Example: `automatic_installation = { exclude = { "rust_analyzer", "solargraph" } }`
+        --       automatic_installation = false,
+
+        --       -- Whether sources that are installed in mason should be automatically set up in null-ls.
+        --       -- Removes the need to set up null-ls manually.
+        --       -- Can either be:
+        --       -- 	- false: Null-ls is not automatically registered.
+        --       -- 	- true: Null-ls is automatically registered.
+        --       -- 	- { types = { SOURCE_NAME = {TYPES} } }. Allows overriding default configuration.
+        --       -- 	Ex: { types = { eslint_d = {'formatting'} } }
+        --       automatic_setup = false,
+        --     }
+        --   )
+        -- end
+    },
+    -- bookmarks
+    { "MattesGroeger/vim-bookmarks" },
+    { "tom-anders/telescope-vim-bookmarks.nvim" },
+
+    -- undo
+    { "mbbill/undotree" },
+    -- diff
+    { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
 }
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "vue", "javascript", "*.jsonc" },
+    command = "set shiftwidth=2"
+})
+-- autocmd FileType javascript set shiftwidth=2
+-- autocmd FileType vue set shiftwidth=2

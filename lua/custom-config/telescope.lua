@@ -1,40 +1,3 @@
--- -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
--- -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
--- local _, actions = pcall(require, "telescope.actions")
--- lvim.builtin.telescope.defaults.mappings = {
---     -- for input mode
---     i = {
---         ["<C-j>"] = actions.move_selection_next,
---         ["<C-k>"] = actions.move_selection_previous,
---         ["<C-n>"] = actions.cycle_history_next,
---         ["<C-p>"] = actions.cycle_history_prev,
---     },
---     -- for normal mode
---     n = {
---         ["<C-j>"] = actions.move_selection_next,
---         ["<C-k>"] = actions.move_selection_previous,
---     },
--- }
-
--- local new_config = {
---     defaults = {
---         mappings = {
---             -- for input mode
---             i = {
---                 ["<C-j>"] = actions.move_selection_next,
---                 ["<C-k>"] = actions.move_selection_previous,
---                 ["<C-n>"] = actions.cycle_history_next,
---                 ["<C-p>"] = actions.cycle_history_prev,
---             },
---             -- for normal mode
---             n = {
---                 ["<C-j>"] = actions.move_selection_next,
---                 ["<C-k>"] = actions.move_selection_previous,
---             },
-
---         }
---     }
--- }
 local telescope = lvim.builtin.telescope
 local actions = require("telescope.actions")
 -- local trouble = require("trouble.providers.telescope")
@@ -48,131 +11,115 @@ local actions = require("telescope.actions")
 -- -- telescope.load_extension('lazygit')
 
 local config = {
-    defaults = {
+  defaults = {
+    mappings = {
+      i = {
+        ["<C-n>"] = actions.cycle_history_next,
+        ["<C-p>"] = actions.cycle_history_prev,
+        ["<Down>"] = actions.cycle_history_next,
+        ["<Up>"] = actions.cycle_history_prev,
 
-        -- prompt_prefix = " ",
-        -- selection_caret = " ",
-        -- path_display = { "smart" },
+        ["<C-j>"] = actions.move_selection_next,
+        ["<C-k>"] = actions.move_selection_previous,
 
-        -- layout_config = {
-        --     vertical = { width = 0.5 }
-        --     -- other layout configuration here
-        -- },
+        ["<C-c>"] = actions.close,
 
-        mappings = {
-            i = {
-                ["<C-n>"] = actions.cycle_history_next,
-                ["<C-p>"] = actions.cycle_history_prev,
-                ["<Down>"] = actions.cycle_history_next,
-                ["<Up>"] = actions.cycle_history_prev,
+        ["<CR>"] = actions.select_default,
+        ["<C-x>"] = actions.select_horizontal,
+        ["<C-v>"] = actions.select_vertical,
+        ["<C-t>"] = actions.select_tab,
 
-                ["<C-j>"] = actions.move_selection_next,
-                ["<C-k>"] = actions.move_selection_previous,
+        ["<C-u>"] = actions.preview_scrolling_up,
+        ["<C-d>"] = actions.preview_scrolling_down,
 
-                ["<C-c>"] = actions.close,
+        ["<PageUp>"] = actions.results_scrolling_up,
+        ["<PageDown>"] = actions.results_scrolling_down,
 
-                ["<CR>"] = actions.select_default,
-                ["<C-x>"] = actions.select_horizontal,
-                ["<C-v>"] = actions.select_vertical,
-                ["<C-t>"] = actions.select_tab,
+        ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+        ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+        ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        ["<C-l>"] = actions.complete_tag,
+        ["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
+        -- ["<c-t>"] = trouble.open_with_trouble,
+      },
 
-                ["<C-u>"] = actions.preview_scrolling_up,
-                ["<C-d>"] = actions.preview_scrolling_down,
+      n = {
+        ["<esc>"] = actions.close,
+        ["<CR>"] = actions.select_default,
+        ["<C-x>"] = actions.select_horizontal,
+        ["<C-v>"] = actions.select_vertical,
+        ["<C-t>"] = actions.select_tab,
 
-                ["<PageUp>"] = actions.results_scrolling_up,
-                ["<PageDown>"] = actions.results_scrolling_down,
+        ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+        ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+        ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
 
-                ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-                ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-                ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-                ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-                ["<C-l>"] = actions.complete_tag,
-                ["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
-                -- ["<c-t>"] = trouble.open_with_trouble,
-            },
+        ["j"] = actions.move_selection_next,
+        ["k"] = actions.move_selection_previous,
+        ["H"] = actions.move_to_top,
+        ["M"] = actions.move_to_middle,
+        ["L"] = actions.move_to_bottom,
 
-            n = {
-                ["<esc>"] = actions.close,
-                ["<CR>"] = actions.select_default,
-                ["<C-x>"] = actions.select_horizontal,
-                ["<C-v>"] = actions.select_vertical,
-                ["<C-t>"] = actions.select_tab,
+        ["<Down>"] = actions.move_selection_next,
+        ["<Up>"] = actions.move_selection_previous,
+        ["gg"] = actions.move_to_top,
+        ["G"] = actions.move_to_bottom,
 
-                ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-                ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-                ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-                ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        ["<C-u>"] = actions.preview_scrolling_up,
+        ["<C-d>"] = actions.preview_scrolling_down,
 
-                ["j"] = actions.move_selection_next,
-                ["k"] = actions.move_selection_previous,
-                ["H"] = actions.move_to_top,
-                ["M"] = actions.move_to_middle,
-                ["L"] = actions.move_to_bottom,
+        ["<PageUp>"] = actions.results_scrolling_up,
+        ["<PageDown>"] = actions.results_scrolling_down,
 
-                ["<Down>"] = actions.move_selection_next,
-                ["<Up>"] = actions.move_selection_previous,
-                ["gg"] = actions.move_to_top,
-                ["G"] = actions.move_to_bottom,
-
-                ["<C-u>"] = actions.preview_scrolling_up,
-                ["<C-d>"] = actions.preview_scrolling_down,
-
-                ["<PageUp>"] = actions.results_scrolling_up,
-                ["<PageDown>"] = actions.results_scrolling_down,
-
-                ["?"] = actions.which_key,
-                -- ["<c-t>"] = trouble.open_with_trouble,
-            },
-        },
+        ["?"] = actions.which_key,
+        -- ["<c-t>"] = trouble.open_with_trouble,
+      },
     },
-    pickers = {
-        find_files = {
-            find_command = { "rg", "--files", "--hidden", "-g", "!.git" },
-            theme = "ivy"
-        },
-        live_grep = {
-            vimgrep_arguments = {
-                "rg",
-                "--hidden",
-                "--color=never",
-                "--no-heading",
-                "--with-filename",
-                "--line-number",
-                "--column",
-                "--smart-case",
-                "-g",
-                "!.git"
-            },
-        }
-        -- Default configuration for builtin pickers goes here:
-        -- picker_name = {
-        --   picker_config_key = value,
-        --   ...
-        -- }
-        -- Now the picker_config_key will be applied every time you call this
-        -- builtin picker
+  },
+  pickers = {
+    find_files = {
+      find_command = { "rg", "--files", "--hidden", "-g", "!.git" },
+      theme = "ivy"
     },
-    extensions = {
-        aerial = {
-            -- Display symbols as <root>.<parent>.<symbol>
-            show_nesting = {
-                ['_'] = false, -- This key will be the default
-                json = true, -- You can set the option for specific filetypes
-                yaml = true,
-            }
-        }
-        -- media_files = {
-        --   -- filetypes whitelist
-        --   -- default to {"png", "jpg", "mp4", "webm", "pdf"}
-        --   filetypes = {"png", "jpg", "webp", "pdf"},
-        --   find_cmd = "rg" -- find command (default to `fd`)
-        -- }
-        -- Your extension configuration goes here:
-        -- extension_name = {
-        --   extension_config_key = value,
-        -- }
-        -- please take a look at the readme of the extension you want to configure
-    },
+    live_grep = {
+      vimgrep_arguments = {
+        "rg",
+        "--hidden",
+        "--color=never",
+        "--no-heading",
+        "--with-filename",
+        "--line-number",
+        "--column",
+        "--smart-case",
+        "-g",
+        "!.git"
+      },
+    }
+  },
+  extensions = {
+    aerial = {
+      -- Display symbols as <root>.<parent>.<symbol>
+      show_nesting = {
+        ['_'] = false, -- This key will be the default
+        json = true, -- You can set the option for specific filetypes
+        yaml = true,
+      }
+    }
+    -- media_files = {
+    --   -- filetypes whitelist
+    --   -- default to {"png", "jpg", "mp4", "webm", "pdf"}
+    --   filetypes = {"png", "jpg", "webp", "pdf"},
+    --   find_cmd = "rg" -- find command (default to `fd`)
+    -- }
+    -- Your extension configuration goes here:
+    -- extension_name = {
+    --   extension_config_key = value,
+    -- }
+    -- please take a look at the readme of the extension you want to configure
+  },
 }
 
 telescope.defaults = config.defaults
+-- telescope.pickers = config.pickers

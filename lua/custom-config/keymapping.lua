@@ -40,18 +40,34 @@ lvim.builtin.which_key.mappings["sn"] = {
     "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Buffer fuzzy"
 }
 lvim.builtin.which_key.mappings["ss"] = {
-    "<cmd>Telescope lsp_document_symbols<cr>", "Buffer fuzzy"
+    "<cmd>Telescope lsp_document_symbols<cr>", "Symbols fuzzy"
 }
 
 -- lsp
 lvim.builtin.which_key.mappings["lh"] = {
     "<cmd>AerialToggle<cr>", "Symbols windows"
 }
+lvim.lsp.buffer_mappings.normal_mode["gr"] = { "<cmd>Telescope lsp_references<cr>", "Find references" }
+lvim.keys.normal_mode["F"] = "<cmd>lua vim.lsp.buf.format()<cr>"
+
+-- temp buffer
+vim.api.nvim_create_user_command("TempBuffer", function()
+    local filetype = vim.fn.input("Input filetype: ")
+    if filetype == "" then
+        vim.cmd("new temp_buffer")
+    else
+        vim.cmd("new temp_buffer_" .. filetype)
+        vim.cmd("setfiletype " .. filetype)
+    end
+    vim.cmd("wincmd L")
+end, { nargs = "?", complete = "dir" })
+
+lvim.keys.normal_mode["C"] = ":TempBuffer<CR>"
 
 -- hopword
-lvim.keys.normal_mode["<leader>j"] = "<cmd>HopWord<cr>"
+lvim.keys.normal_mode["<leader>j"] = "<cmd>HopWordMW<cr>"
 lvim.keys.normal_mode["<leader>p"] = "<cmd>HopPattern<cr>"
-lvim.keys.normal_mode["<leader>n"] = "<cmd>HopLine<cr>"
+lvim.keys.normal_mode["<leader>n"] = "<cmd>HopLineMW<cr>"
 lvim.keys.visual_mode["<leader>j"] = "<cmd>HopWord<cr>"
 lvim.keys.visual_mode["<leader>p"] = "<cmd>HopPattern<cr>"
 lvim.keys.visual_mode["<leader>n"] = "<cmd>HopLine<cr>"
