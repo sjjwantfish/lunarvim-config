@@ -17,6 +17,7 @@ require("custom-config.dadbod")
 require("custom-config.vim-interestingwords")
 require("custom-config.treesitter")
 require("custom-config.cmp")
+require("custom-config.tabout")
 
 -- -- Use which-key to add extra bindings with the leader-key prefix
 -- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
@@ -144,7 +145,7 @@ linters.setup {
 lvim.plugins = {
     -- colorscheme
     { "rafamadriz/neon" },
-    { 'projekt0n/github-nvim-theme', tag = '0.0.6' },
+    -- { 'projekt0n/github-nvim-theme', tag = '0.0.7' },
     { "folke/trouble.nvim", cmd = "TroubleToggle" },
     { "stevearc/aerial.nvim" },
     -- jumping
@@ -154,6 +155,10 @@ lvim.plugins = {
             -- you can configure Hop the way you like here; see :h hop-config
             require 'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
         end
+    },
+    {
+        "abecodes/tabout.nvim",
+        wants = { 'vim-treesitter' }, -- or require if not used so far
     },
     -- selection
     { "gcmt/wildfire.vim" },
