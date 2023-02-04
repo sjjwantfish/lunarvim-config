@@ -3,8 +3,6 @@ lvim.log.level = "warn"
 lvim.format_on_save.enabled = true
 -- lvim.colorscheme = "lunar"
 lvim.transparent_window = false
--- to disable icons and use a minimalist setup, uncomment the following
--- lvim.use_icons = false
 
 require("custom-config.keymapping")
 require("custom-config.colorscheme")
@@ -18,21 +16,8 @@ require("custom-config.vim-interestingwords")
 require("custom-config.treesitter")
 require("custom-config.cmp")
 require("custom-config.tabout")
+require("custom-config.dap")
 
--- -- Use which-key to add extra bindings with the leader-key prefix
--- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
--- lvim.builtin.which_key.mappings["t"] = {
---     name = "+Trouble",
---     r = { "<cmd>Trouble lsp_references<cr>", "References" },
---     f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
---     d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
---     q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
---     l = { "<cmd>Trouble loclist<cr>", "LocationList" },
---     w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
--- }
-
--- TODO: User Config for predefined plugins
--- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.terminal.active = true
@@ -141,11 +126,14 @@ linters.setup {
         filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact", "vue", "svelte" } },
 }
 
+
+lvim.builtin.dap.active = true
+
 -- Additional Plugins
 lvim.plugins = {
     -- colorscheme
-    { "rafamadriz/neon" },
-    -- { 'projekt0n/github-nvim-theme', tag = '0.0.7' },
+    -- { "rafamadriz/neon" },
+    { 'projekt0n/github-nvim-theme', tag = 'v0.0.7' },
     { "folke/trouble.nvim", cmd = "TroubleToggle" },
     { "stevearc/aerial.nvim" },
     -- jumping
@@ -175,36 +163,15 @@ lvim.plugins = {
     },
     { 'windwp/nvim-ts-autotag' },
     -- lsp
-    { "jayp0521/mason-null-ls.nvim",
-        -- config = function()
-        --   require("mason-null-ls").setup(
-        --     {
-        --       -- A list of sources to install if they're not already installed.
-        --       -- This setting has no relation with the `automatic_installation` setting.
-        --       -- ensure_installed = require("user.lsp.config").null_ls,
-
-        --       -- Run `require("null-ls").setup`.
-        --       -- Will automatically install masons tools based on selected sources in `null-ls`.
-        --       -- Can also be an exclusion list.
-        --       -- Example: `automatic_installation = { exclude = { "rust_analyzer", "solargraph" } }`
-        --       automatic_installation = false,
-
-        --       -- Whether sources that are installed in mason should be automatically set up in null-ls.
-        --       -- Removes the need to set up null-ls manually.
-        --       -- Can either be:
-        --       -- 	- false: Null-ls is not automatically registered.
-        --       -- 	- true: Null-ls is automatically registered.
-        --       -- 	- { types = { SOURCE_NAME = {TYPES} } }. Allows overriding default configuration.
-        --       -- 	Ex: { types = { eslint_d = {'formatting'} } }
-        --       automatic_setup = false,
-        --     }
-        --   )
-        -- end
-    },
+    { "jayp0521/mason-null-ls.nvim" },
     -- bookmarks
     { "MattesGroeger/vim-bookmarks" },
     { "tom-anders/telescope-vim-bookmarks.nvim" },
+    -- replace
+    { "roobert/search-replace.nvim", config = function()
+        require("search-replace").setup()
 
+    end },
     -- undo
     { "mbbill/undotree" },
     -- diff

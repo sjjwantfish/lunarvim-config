@@ -25,8 +25,12 @@ lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 -- lvim.keys.normal_mode["<leader>8"] = ":BufferLineGoToBuffer 8<CR>"
 -- lvim.keys.normal_mode["<leader>9"] = ":BufferLineGoToBuffer 9<CR>"
 
+
+
+local keymap = lvim.builtin.which_key.mappings
+
 -- windows
-lvim.builtin.which_key.mappings["w"] = {
+keymap["w"] = {
     name = "Windows",
     -- split windows
     l = { "<cmd>set splitright<CR><cmd>vsplit<CR>", "Split right" },
@@ -36,15 +40,15 @@ lvim.builtin.which_key.mappings["w"] = {
 }
 
 -- search
-lvim.builtin.which_key.mappings["sn"] = {
+keymap["sn"] = {
     "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Buffer fuzzy"
 }
-lvim.builtin.which_key.mappings["ss"] = {
+keymap["ss"] = {
     "<cmd>Telescope lsp_document_symbols<cr>", "Symbols fuzzy"
 }
 
 -- lsp
-lvim.builtin.which_key.mappings["lh"] = {
+keymap["lh"] = {
     "<cmd>AerialToggle<cr>", "Symbols windows"
 }
 lvim.lsp.buffer_mappings.normal_mode["gr"] = { "<cmd>Telescope lsp_references<cr>", "Find references" }
@@ -53,9 +57,7 @@ lvim.keys.normal_mode["F"] = "<cmd>lua vim.lsp.buf.format()<cr>"
 -- temp buffer
 vim.api.nvim_create_user_command("TempBuffer", function()
     local filetype = vim.fn.input("Input filetype: ")
-    if filetype == "" then
-        vim.cmd("new temp_buffer")
-    else
+    if filetype ~= "" then
         vim.cmd("new temp_buffer_" .. filetype)
         vim.cmd("setfiletype " .. filetype)
     end
@@ -63,6 +65,9 @@ vim.api.nvim_create_user_command("TempBuffer", function()
 end, { nargs = "?", complete = "dir" })
 
 lvim.keys.normal_mode["C"] = ":TempBuffer<CR>"
+
+-- undotree
+lvim.keys.normal_mode["<leader>u"] = "<cmd>UndotreeToggle<cr>"
 
 -- hopword
 lvim.keys.normal_mode["<leader>j"] = "<cmd>HopWordMW<cr>"
@@ -76,3 +81,30 @@ lvim.keys.visual_mode["<leader>n"] = "<cmd>HopLine<cr>"
 lvim.keys.normal_mode["<a-h>"] = "<cmd>call InterestingWords('n')<cr>"
 lvim.keys.visual_mode["<a-h>"] = "<cmd>call InterestingWords('v')<cr>"
 lvim.keys.normal_mode["<a-H>"] = "<cmd>call UncolorAllWords()<cr>"
+
+-- wildfire
+lvim.keys.normal_mode["<a-m>"] = "<Plug>(wildfire-quick-select)"
+-- lvim.keys.normal_mode["<a-,>"] = "<Plug>(wildfire-fuel)"
+
+-- search-replace
+keymap["r"] = { name = "SearchReplaceSingleBuffer" }
+keymap["r"]["s"] = { "<CMD>SearchReplaceSingleBufferSelections<CR>", "SearchReplaceSingleBuffer [s]elction list" }
+keymap["r"]["o"] = { "<CMD>SearchReplaceSingleBufferOpen<CR>", "[o]pen" }
+keymap["r"]["w"] = { "<CMD>SearchReplaceSingleBufferCWord<CR>", "[w]ord" }
+keymap["r"]["W"] = { "<CMD>SearchReplaceSingleBufferCWORD<CR>", "[W]ORD" }
+keymap["r"]["e"] = { "<CMD>SearchReplaceSingleBufferCExpr<CR>", "[e]xpr" }
+keymap["r"]["f"] = { "<CMD>SearchReplaceSingleBufferCFile<CR>", "[f]ile" }
+keymap["r"]["b"] = { name = "SearchReplaceMultiBuffer" }
+keymap["r"]["b"]["s"] = { "<CMD>SearchReplaceMultiBufferSelections<CR>", "SearchReplaceMultiBuffer [s]elction list" }
+keymap["r"]["b"]["o"] = { "<CMD>SearchReplaceMultiBufferOpen<CR>", "[o]pen" }
+keymap["r"]["b"]["w"] = { "<CMD>SearchReplaceMultiBufferCWord<CR>", "[w]ord" }
+keymap["r"]["b"]["W"] = { "<CMD>SearchReplaceMultiBufferCWORD<CR>", "[W]ORD" }
+keymap["r"]["b"]["e"] = { "<CMD>SearchReplaceMultiBufferCExpr<CR>", "[e]xpr" }
+keymap["r"]["b"]["f"] = { "<CMD>SearchReplaceMultiBufferCFile<CR>", "[f]ile" }
+
+lvim.keys.visual_block_mode["<C-r>"] = [[<CMD>SearchReplaceSingleBufferVisualSelection<CR>]]
+lvim.keys.visual_block_mode["<C-s>"] = [[<CMD>SearchReplaceWithinVisualSelection<CR>]]
+lvim.keys.visual_block_mode["<C-b>"] = [[<CMD>SearchReplaceWithinVisualSelectionCWord<CR>]]
+
+-- show the effects of a search / replace in a live preview window
+vim.o.inccommand = "split"
