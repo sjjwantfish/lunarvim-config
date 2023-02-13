@@ -39,7 +39,8 @@ lvim.builtin.treesitter.ensure_installed = {
     "markdown",
     "sql",
     "regex",
-    "bash"
+    "bash",
+    "proto",
 }
 lvim.builtin.treesitter.autotag.enable = true
 lvim.builtin.telescope.autopairs = { enable = true }
@@ -65,6 +66,7 @@ lvim.lsp.installer.setup.ensure_installed = {
     'jsonls',
     -- vim
     'vimls',
+    "bufls",
 }
 -- change UI setting of `LspInstallInfo`
 -- see <https://github.com/williamboman/nvim-lsp-installer#default-configuration>

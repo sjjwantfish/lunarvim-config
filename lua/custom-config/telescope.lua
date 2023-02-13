@@ -14,7 +14,17 @@ local function get_pickers(actions)
             -- theme = "dropdown",
             find_command = { "rg", "--files", "--hidden", "-g", "!.git" },
             -- hidden = true,
-            previewer = false,
+            -- previewer = false,
+            -- theme
+            layout_strategy = "bottom_pane",
+            -- config
+            layout_config = {
+                bottom_pane = {
+                    height = 15,
+                    preview_cutoff = 100,
+                    prompt_position = "bottom",
+                },
+            },
         },
         live_grep = {
             only_sort_text = true,
@@ -38,7 +48,7 @@ local function get_pickers(actions)
         },
         buffers = {
             -- theme = "dropdown",
-            previewer = true,
+            -- previewer = true,
             initial_mode = "normal",
         },
         planets = {
@@ -48,7 +58,7 @@ local function get_pickers(actions)
         git_files = {
             -- theme = "dropdown",
             hidden = true,
-            previewer = false,
+            -- previewer = false,
             show_untracked = true,
         },
         lsp_references = {
