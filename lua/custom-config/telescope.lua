@@ -15,16 +15,16 @@ local function get_pickers(actions)
             find_command = { "rg", "--files", "--hidden", "-g", "!.git" },
             -- hidden = true,
             -- previewer = false,
-            -- theme
-            layout_strategy = "bottom_pane",
-            -- config
-            layout_config = {
-                bottom_pane = {
-                    height = 15,
-                    preview_cutoff = 100,
-                    prompt_position = "bottom",
-                },
-            },
+            -- -- theme
+            -- layout_strategy = "bottom_pane",
+            -- -- config
+            -- layout_config = {
+            --     bottom_pane = {
+            --         height = 15,
+            --         preview_cutoff = 100,
+            --         prompt_position = "bottom",
+            --     },
+            -- },
         },
         live_grep = {
             only_sort_text = true,

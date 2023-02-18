@@ -135,8 +135,9 @@ lvim.builtin.dap.active = true
 lvim.plugins = {
     -- colorscheme
     -- { "rafamadriz/neon" },
-    { 'projekt0n/github-nvim-theme', tag = 'v0.0.7' },
-    { "folke/trouble.nvim", cmd = "TroubleToggle" },
+    -- { 'projekt0n/github-nvim-theme', tag = 'v0.0.7' },
+    { 'projekt0n/github-nvim-theme', version = 'v0.0.7' },
+    { "folke/trouble.nvim",          cmd = "TroubleToggle" },
     { "stevearc/aerial.nvim" },
     -- jumping
     { "phaazon/hop.nvim",
@@ -148,7 +149,8 @@ lvim.plugins = {
     },
     {
         "abecodes/tabout.nvim",
-        wants = { 'vim-treesitter' }, -- or require if not used so far
+        -- wants = { 'vim-treesitter' }, -- or require if not used so far
+        dependencies = { 'nvim-treesitter' }, -- or require if not used so far
     },
     -- selection
     { "gcmt/wildfire.vim" },
@@ -157,7 +159,10 @@ lvim.plugins = {
     { "kristijanhusak/vim-dadbod-ui" },
     { "kristijanhusak/vim-dadbod-completion" },
     -- code runner
-    { "michaelb/sniprun", run = "bash ./install.sh" },
+    { "michaelb/sniprun",
+        -- run = "bash ./install.sh"
+        build = "bash ./install.sh"
+    },
     -- ts
     { "lfv89/vim-interestingwords" },
     {
@@ -172,12 +177,14 @@ lvim.plugins = {
     -- replace
     { "roobert/search-replace.nvim", config = function()
         require("search-replace").setup()
-
     end },
     -- undo
     { "mbbill/undotree" },
     -- diff
-    { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
+    { 'sindrets/diffview.nvim',
+        -- requires = 'nvim-lua/plenary.nvim',
+        dependencies = 'nvim-lua/plenary.nvim',
+    }
 }
 
 vim.api.nvim_create_autocmd("FileType", {
